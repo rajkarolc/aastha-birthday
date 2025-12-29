@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> BANDARIYA❤️</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:ital,wght@1,500&family=Poppins:wght@300;600&display=swap');
+
+:root{
+    --bg:#050103;
+    --pink:#ff0054;
+    --soft:#ff85a1;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    background:var(--bg);
+    color:white;
+    font-family:'Poppins',sans-serif;
+    overflow-x:hidden;
+}
+
+/* ---------- HEARTBEAT GLOW ---------- */
+@keyframes heartGlow{
+    0%{box-shadow:0 0 0 rgba(255,133,161,0);}
+    50%{box-shadow:0 0 40px rgba(255,133,161,0.35);}
+    100%{box-shadow:0 0 0 rgba(255,133,161,0);}
+}
+
+.note-pulse{
+    animation:heartGlow 1.2s ease;
+}
+
+/* ---------- LOCK ---------- */
+#lock-screen{
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle,#1a050d,#050103);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+/* ---------- FLIP TIMER ---------- */
+#flip-timer{
+    display:flex;
+    gap:20px;
+}
+
+.flip-box{
+    background:linear-gradient(180deg,#1a050d,#050103);
+    padding:20px 25px;
+    border-radius:15px;
+    box-shadow:0 0 40px rgba(255,0,84,0.6);
+    text-align:center;
+}
+
+.flip-box span{
+    font-size:3.4rem;
+    font-weight:700;
+    color:var(--pink);
+    display:block;
+    animation:flip 1s ease;
+}
+
+.flip-box small{
+    letter-spacing:3px;
+    font-size:.75rem;
+    opacity:.6;
+}
+
+@keyframes flip{
+    from{transform:rotateX(90deg);opacity:0}
+    to{transform:rotateX(0);opacity:1}
+}
+
+/* ---------- MONKEY ---------- */
+#monkey-unlock{
+    display:none;
+    font-size:150px;
+    cursor:pointer;
+    margin-top:40px;
+    filter:drop-shadow(0 0 30px var(--pink));
+}
+
+/* ---------- MAIN ---------- */
+#main-wrapper{display:none;text-align:center;}
+
+.title-glow{
+    font-family:'Dancing Script',cursive;
+    font-size:5rem;
+    margin:100px 0;
+    color:var(--soft);
+    text-shadow:0 0 30px var(--soft);
+}
+
+/* ---------- PHOTOS ---------- */
+.gallery-container{max-width:600px;margin:auto;}
+
+.photo-card{
+    background:white;
+    padding:15px 15px 60px;
+    margin:200px auto;
+    width:85%;
+    opacity:0;
+    transform:translateX(var(--dir)) rotate(var(--rot)) scale(.85);
+    filter:blur(12px);
+    transition:all 2.5s ease;
+}
+
+.photo-card.active{
+    opacity:1;
+    transform:translateX(0) rotate(var(--rot)) scale(1);
+    filter:blur(0);
+}
+
+.photo-card img{width:100%;}
+
+/* ---------- NOTE ---------- */
+.note-wrap{
+    max-width:900px;
+    margin:300px auto;
+    padding:60px;
+    border-radius:40px;
+    background:rgba(255,255,255,0.035);
+    backdrop-filter:blur(6px);
+}
+
+#note-text p{
+    margin-bottom:40px;
+    line-height:1.9;
+}
+
+.word{
+    display:inline-block;
+    font-family:'Lora',serif;
+    font-size:2.2rem;
+    margin:6px;
+    color: rgba(255, 255, 255, 0.05); 
+    filter: blur(8px);
+    transform: translateY(10px);
+    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.word.active{
+    color:white;
+    filter:blur(0);
+    transform: translateY(0);
+    text-shadow:0 0 10px rgba(255,133,161,0.8);
+}
+
+/* ---------- VIDEO SECTION ---------- */
+#video-container {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 2s ease;
+    margin: 100px auto 300px;
+    max-width: 800px;
+    display: none;
+}
+
+#video-container.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+video {
+    width: 90%;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(255, 0, 84, 0.4);
+    border: 2px solid var(--soft);
+}
+
+/* ---------- EFFECTS ---------- */
+.star{
+    position:fixed;
+    background:white;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:-1;
+}
+
+.heart-pop{
+    position:fixed;
+    font-size:24px;
+    pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="audioTrack" src="music.mp3" loop></audio>
+
+<div id="lock-screen">
+    <h2 style="letter-spacing:5px;margin-bottom:30px;">FOR YOU</h2>
+
+    <div id="flip-timer">
+        <div class="flip-box"><span id="days">00</span><small>DAYS</small></div>
+        <div class="flip-box"><span id="hours">00</span><small>HRS</small></div>
+        <div class="flip-box"><span id="minutes">00</span><small>MIN</small></div>
+        <div class="flip-box"><span id="seconds">00</span><small>SEC</small></div>
+    </div>
+
+    <div id="monkey-unlock">🐒</div>
+</div>
+
+<div id="main-wrapper">
+    <h1 class="title-glow">Happy Birthday, Baby</h1>
+    <div class="gallery-container" id="gallery"></div>
+    <div class="note-wrap"><div id="note-text"></div></div>
+    
+    <div id="video-container">
+        <h2 style="margin-bottom:30px; font-family:'Dancing Script'; font-size:3rem; color:var(--soft);">FCK U 🥹...</h2>
+        <video id="wishVideo" controls>
+            <source src="wish.mp4" type="video/mp4">
+        </video>
+    </div>
+</div>
+
+<script>
+const targetDate=new Date("2026-01-01T00:00:00+05:30").getTime();
+const audio=document.getElementById("audioTrack");
+const wishVideo = document.getElementById("wishVideo");
+
+const msg=`
+Happy Birthday, baby.
+
+I could have never imagined that we would end up like this.
+Even if I had the chance to write a perfect love story for myself,
+it would barely beat what I’ve experienced with you.
+Aur yeh bilkul bhi maska nahi hai.
+
+And look, it’s your birthday today.
+Now you can stop calling me dada ji,
+because you’re turning 19 with this lovely new year.
+So happy new year too, baby.
+
+There’s so much I want to say,
+but I don’t have the words right now.
+Maybe one day.
+Until then, bear with this :)
+
+If you were a man,
+I’d still be gay for you.
+
+I love you <3
+`;
+
+/* COUNTDOWN */
+const cd=setInterval(()=>{
+    const diff=targetDate-Date.now();
+    if(diff<=0){
+        clearInterval(cd);
+        document.getElementById("flip-timer").style.display="none";
+        document.getElementById("monkey-unlock").style.display="block";
+    }else{
+        setFlip("days",Math.floor(diff/86400000));
+        setFlip("hours",Math.floor(diff/3600000)%24);
+        setFlip("minutes",Math.floor(diff/60000)%60);
+        setFlip("seconds",Math.floor(diff/1000)%60);
+    }
+},1000);
+
+function setFlip(id,val){
+    const el=document.getElementById(id);
+    const v=String(val).padStart(2,"0");
+    if(el.innerText!==v){
+        el.innerText=v;
+        el.style.animation="none";
+        el.offsetHeight;
+        el.style.animation="flip 1s";
+    }
+}
+
+/* UNLOCK */
+document.getElementById("monkey-unlock").onclick=()=>{
+    document.getElementById("lock-screen").style.display="none";
+    document.getElementById("main-wrapper").style.display="block";
+    audio.currentTime=30;
+    audio.play();
+    initStars();
+    startShow();
+};
+
+/* SHOW GALLERY */
+async function startShow(){
+    const g=document.getElementById("gallery");
+    for(let i=1;i<=10;i++){
+        const c=document.createElement("div");
+        c.className="photo-card";
+        c.style.setProperty("--dir",i%2?"-150px":"150px");
+        c.style.setProperty("--rot",(Math.random()*10-5)+"deg");
+        c.innerHTML=`<img src="images/${i}.jpg">`;
+        g.appendChild(c);
+        await wait(300);
+        c.classList.add("active");
+        hearts(c.offsetTop);
+        window.scrollTo({top:c.offsetTop-100,behavior:"smooth"});
+        await wait(4000);
+    }
+    await showNote();
+}
+
+/* NOTE REVEAL + AUTO VIDEO */
+async function showNote(){
+    const note=document.getElementById("note-text");
+    const wrap=document.querySelector(".note-wrap");
+    const paras=msg.trim().split("\n\n");
+
+    for(const para of paras){
+        const p=document.createElement("p");
+        note.appendChild(p);
+        for(const w of para.split(/\s+/)){
+            const s=document.createElement("span");
+            s.className="word";
+            s.innerText=w;
+            p.appendChild(s);
+            p.appendChild(document.createTextNode(" "));
+            await wait(280);
+            s.classList.add("active");
+            pulse(wrap);
+            s.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        await wait(1000);
+    }
+    
+    // --- VIDEO TRIGGER ---
+    const vidCon = document.getElementById("video-container");
+    vidCon.classList.add("show");
+    vidCon.scrollIntoView({ behavior: "smooth", block: "center" });
+    
+    await wait(1000); // Small pause for the "fck u 🥹 " text to be seen
+    
+    // Lower music volume and play the video
+    audio.volume = 0.2; 
+    wishVideo.play();
+}
+
+function pulse(el){
+    el.classList.remove("note-pulse");
+    void el.offsetWidth;
+    el.classList.add("note-pulse");
+}
+
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+
+/* EFFECTS */
+function initStars(){
+    for(let i=0;i<150;i++){
+        const s=document.createElement("div");
+        s.className="star";
+        const size=Math.random()*3+"px";
+        s.style.width=size;
+        s.style.height=size;
+        s.style.top=Math.random()*100+"vh";
+        s.style.left=Math.random()*100+"vw";
+        s.style.opacity=Math.random();
+        document.body.appendChild(s);
+    }
+}
+
+function hearts(y){
+    for(let i=0;i<20;i++){
+        const h=document.createElement("div");
+        h.className="heart-pop";
+        h.innerHTML="❤️";
+        h.style.left="50vw";
+        h.style.top=y+"px";
+        document.body.appendChild(h);
+        h.animate([
+            {transform:"scale(0)",opacity:1},
+            {transform:`translate(${(Math.random()-0.5)*800}px,${(Math.random()-0.5)*800}px) scale(2)`,opacity:0}
+        ],{duration:2500});
+        setTimeout(()=>h.remove(),2500);
+    }
+}
+</script>
+
+</body>
+</html>
